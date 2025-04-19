@@ -1,0 +1,58 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+/* Variables globales */
+:root {
+  --primary-color: #3b82f6;
+  --secondary-color: #1e40af;
+  --accent-color: #10b981;
+  --text-color: #111827;
+  --text-light: #4b5563;
+  --bg-light: #f9fafb;
+}
+
+/* Règles de base */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+/* Améliorations d'accessibilité */
+:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Aide pour les écrans de lecteurs d'écran */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Améliorations pour l'impression */
+@media print {
+  body {
+    color: #000;
+    background: #fff;
+  }
+
+  a,
+  a:link,
+  a:visited {
+    color: #000;
+    text-decoration: underline;
+  }
+}

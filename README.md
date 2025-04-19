@@ -1,6 +1,39 @@
-# Nuxt Minimal Starter
+# Messie Services - Site Web
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Ce projet est le site web pour Messie Services, une entreprise spécialisée dans les services de nettoyage professionnel.
+
+## Structure du projet
+
+Le projet est organisé en composants modulaires pour une meilleure maintenabilité et réutilisabilité:
+
+```
+components/
+├── ui/                   # Composants UI réutilisables
+│   ├── StarRating.vue
+│   ├── CarouselNavButton.vue
+│   ├── CarouselIndicators.vue
+│   ├── SocialButton.vue
+│   ├── NewsletterForm.vue
+│   ├── BackToTopButton.vue
+│   └── PatternBackground.vue
+├── icons/                # Composants d'icônes
+│   └── QuoteIcon.vue
+├── testimonial/          # Composants liés aux témoignages
+│   └── TestimonialCard.vue
+├── service/             # Composants liés aux services
+│   └── ServiceCard.vue
+├── footer/              # Composants du pied de page
+│   ├── FooterAboutSection.vue
+│   ├── FooterLinks.vue
+│   ├── FooterContact.vue
+│   ├── FooterSocial.vue
+│   └── FooterBottom.vue
+├── TestimonialCarousel.vue   # Carrousel de témoignages
+├── ServiceCarousel.vue       # Carrousel de services
+├── foot.vue                  # Pied de page principal
+├── navbar.vue                # Barre de navigation
+└── HeroBanner.vue            # Bannière d'accueil
+```
 
 ## Setup
 
@@ -55,21 +88,3 @@ yarn build
 # bun
 bun run build
 ```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

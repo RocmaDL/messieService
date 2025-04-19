@@ -1,21 +1,18 @@
 <template>
-  <header>
-    <nav>
-      <h1>CacaLand</h1>
-      <ul>
-        <li><NuxtLink to="/">Home</NuxtLink></li>
-        <li><NuxtLink to="/caca">Caca</NuxtLink></li>
-      </ul>
-    </nav>  
-  </header>
-
+  <navbar />
   <div>
     <slot />
   </div>
+  <foot />
 </template>
 
 <script>
-export default {};  
-</script>
+import AOS from "aos";
+import "aos/dist/aos.css";
 
-<style></style>
+export default {
+  mounted() {
+    AOS.init({ duration: 800, once: true });
+  },
+};
+</script>
