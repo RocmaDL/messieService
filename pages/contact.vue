@@ -72,8 +72,6 @@
 </template>
 
 <script>
-console.log(process.env.GMAIL_USER);
-
 export default {
   data() {
     return {

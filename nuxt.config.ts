@@ -41,13 +41,13 @@ export default defineNuxtConfig({
     transpile: ["@nuxt/ui"],
   },
   nodemailer: {
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASS,
-      },
-      from: '"Messie Service" <rdimbalau@gmail.com>',
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.NUXT_GMAIL_USER,
+      pass: process.env.NUXT_GMAIL_APP_PASS,
+    },
+    from: '"Messie Service" <rdimbalau@gmail.com>',
   },
 });

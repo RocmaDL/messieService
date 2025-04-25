@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
 
   // Envoi de l’e-mail de contact à l'administrateur
   await sendMail({
-    to: process.env.GMAIL_USER, // destinataire
+    to: process.env.NUXT_GMAIL_USER, // destinataire
     subject: `CONTACT: Nouveau message de ${body.name}`, // sujet
     text: `Nom : ${body.name}\nEmail : ${body.email}\nMessage : ${body.message}`, // contenu texte
     // Pour du HTML : html: `<p>${body.message}</p>`
