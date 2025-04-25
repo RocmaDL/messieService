@@ -1,26 +1,42 @@
-// server/api/send-email.post.js
+// server/api/send-email-contact.post.js
 export default defineEventHandler(async (event) => {
-  // Récupère les données JSON envoyées par le client
   const body = await readBody(event);
   const config = useRuntimeConfig();
-  // Injecte le composable serveur
+
+  // Débogage
+  console.log("Variables d'environnement:", {
+    userEnv: process.env.NUXT_GMAIL_USER,
+    passEnv: process.env.NUXT_GMAIL_APP_PASS ? "défini" : "non défini",
+    userConfig: config.nodemailerUser,
+    passConfig: config.nodemailerPass ? "défini" : "non défini",
+  });
+
   const { sendMail } = useNodeMailer();
 
-  // Envoi de l’e-mail de contact au client pour l'informer de la réception de son message
-  await sendMail({
-    to: body.email, // destinataire
-    subject: `CONTACT: Nouveau message de ${body.name}`, // sujet
-    text: body.message, // contenu texte
-    // Pour du HTML : html: `<p>${body.message}</p>`
-  });
+  // Le reste de votre code...
 
-  // Envoi de l’e-mail de contact à l'administrateur
-  await sendMail({
-    to:config.nodemailerUser, // destinataire
-    subject: `CONTACT: Nouveau message de ${body.name}`, // sujet
-    text: `Nom : ${body.name}\nEmail : ${body.email}\nMessage : ${body.message}`, // contenu texte
-    // Pour du HTML : html: `<p>${body.message}</p>`
-  });
+  try {
+    // Envoi au client
+    await sendMail({
+      to: body.email,
+      subject: `CONTACT: Nouveau message de ${body.name}`,
+      text: body.message,
+    });
 
-  return { status: "success" };
+    // Envoi à l'administrateur
+    await sendMail({
+      to: config.nodemailerUser,
+      subject: `CONTACT: Nouveau message de ${body.name}`,
+      text: `Nom : ${body.name}\nEmail : ${body.email}\nMessage : ${body.message}`,
+    });
+
+    return { status: "success" };
+  } catch (error) {
+    console.error("Erreur d'envoi d'email:", error);
+    return {
+      status: "error",
+      message: error.message,
+      stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
+    };
+  }
 });
