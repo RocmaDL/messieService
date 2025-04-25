@@ -449,29 +449,40 @@ export default {
     },
 
     async validateAndSend() {
-      // Valider tous les champs
       if (!this.validateAllFields()) {
         this.formError = "Veuillez corriger les erreurs dans le formulaire";
         return;
       }
-
-      // Réinitialiser l'erreur du formulaire
-      this.formError = "";
       this.isSubmitting = true;
+      this.formError = "";
 
       try {
-        // Simuler l'envoi du formulaire (remplacer par une vraie requête API)
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // Envoi des données au serveur
+        const response = await fetch("/api/send-email-contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: this.form.name,
+            email: this.form.email,
+            phone: this.form.phone,
+            service: this.form.service,
+            message: this.form.message,
+            consent: this.form.consent,
+          }),
+        });
 
-        // Émettre l'événement de succès
-        this.$emit("form-sent", this.form);
-
-        // Réinitialiser le formulaire
-        this.resetForm();
+        const result = await response.json();
+        console.log(result);
+        if (result.status === "success") {
+          this.$emit("form-sent", this.form);
+          this.resetForm();
+        } else {
+          throw new Error("Envoi échoué");
+        }
       } catch (error) {
-        console.error("Erreur lors de l'envoi du formulaire", error);
+        console.error("Erreur lors de l’envoi du formulaire", error);
         this.formError =
-          "Une erreur s'est produite lors de l'envoi du formulaire. Veuillez réessayer.";
+          "Une erreur s'est produite lors de l'envoi. Veuillez réessayer.";
       } finally {
         this.isSubmitting = false;
       }
@@ -496,6 +507,7 @@ export default {
       this.formError = "";
     },
   },
+  emits: ["form-sent"],
 };
 </script>
 

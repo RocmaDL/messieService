@@ -58,17 +58,6 @@
         </li>
         <li>
           <NuxtLink
-            to="/simulateur"
-            class="group relative overflow-hidden bg-white text-blue-600 px-4 py-2 rounded-lg font-medium shadow hover:shadow-lg transition-all duration-300"
-          >
-            <span class="relative z-10">Simuler un devis</span>
-            <span
-              class="absolute inset-0 bg-gradient-to-r from-blue-200 to-blue-100 transform scale-x-0 origin-left transition-transform group-hover:scale-x-100"
-            ></span>
-          </NuxtLink>
-        </li>
-        <li>
-          <NuxtLink
             to="/contact"
             class="relative py-2 px-3 hover:text-blue-200 transition-colors duration-200 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-white after:transition-all hover:after:w-full"
             :class="{
@@ -76,6 +65,17 @@
             }"
           >
             Contact
+          </NuxtLink>
+        </li>
+        <li>
+          <NuxtLink
+            to="/simulateur"
+            class="group relative overflow-hidden bg-white text-blue-600 px-4 py-2 rounded-lg font-medium shadow hover:shadow-lg transition-all duration-300"
+          >
+            <span class="relative z-10">Simuler un devis</span>
+            <span
+              class="absolute inset-0 bg-gradient-to-r from-blue-200 to-blue-100 transform scale-x-0 origin-left transition-transform group-hover:scale-x-100"
+            ></span>
           </NuxtLink>
         </li>
       </ul>

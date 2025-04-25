@@ -72,6 +72,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -98,7 +99,6 @@ export default {
       console.log("Formulaire envoyé :", formData);
       this.showNotification = true;
 
-      // Fermer automatiquement la notification après 5 secondes
       setTimeout(() => {
         this.showNotification = false;
       }, 5000);

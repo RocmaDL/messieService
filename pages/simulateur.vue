@@ -161,8 +161,7 @@
                   type="submit"
                   :disabled="
                     isSent ||
-                    (currentStep === steps.length &&
-                      !$refs.formStepSummary?.isFormValid)
+                    (currentStep === steps.length && !isContactFormValid)
                   "
                   :loading="isSubmitting"
                   class="submit-btn-pulse"
@@ -344,6 +343,7 @@ export default {
       showNotification: false,
       isSent: false,
       isSubmitting: false,
+      isContactFormValid: false, // Ajout d'une nouvelle propriété pour gérer l'état de validation
     };
   },
   mounted() {
@@ -364,13 +364,31 @@ export default {
       },
       deep: true,
     },
+    contactInfo: {
+      handler(newVal) {
+        // Vérifier si les champs obligatoires sont remplis
+        this.isContactFormValid =
+          !!newVal.firstName?.trim() &&
+          !!newVal.lastName?.trim() &&
+          !!newVal.email?.trim() &&
+          !!newVal.phone?.trim() &&
+          this.validateEmail(newVal.email);
+      },
+      deep: true,
+    },
   },
   methods: {
+    validateEmail(email) {
+      // Expression régulière simple pour valider l'email
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(String(email).toLowerCase());
+    },
     resetAll() {
       this.currentStep = 1;
       this.isSent = false;
       this.isSubmitting = false;
       this.showNotification = false;
+      this.isContactFormValid = false; // Réinitialiser la validation du formulaire
       this.form = {
         city: "",
         frequency: "",
@@ -456,6 +474,15 @@ export default {
     },
     updateContactInfo(info) {
       this.contactInfo = info;
+      // Vérifier la validité des champs immédiatement après mise à jour
+      this.$nextTick(() => {
+        this.isContactFormValid =
+          !!info.firstName?.trim() &&
+          !!info.lastName?.trim() &&
+          !!info.email?.trim() &&
+          !!info.phone?.trim() &&
+          this.validateEmail(info.email);
+      });
     },
     updateFormField(fieldName, value) {
       console.log(`Field ${fieldName} updated with value:`, value);
@@ -463,14 +490,18 @@ export default {
       this.form[fieldName] = value;
     },
     submitForm() {
+      const mail = useMail();
       // Vérifier si les informations de contact sont valides
-      // Récupérer la référence du composant FormStepSummary si disponible
-      const formSummaryComponent = this.$refs.formStepSummary;
-      if (formSummaryComponent && this.currentStep === this.steps.length) {
-        const isValid = formSummaryComponent.validateAllFields();
-        if (!isValid) {
-          // Nous utilisons maintenant la validation directe dans le formulaire
-          // qui va désactiver le bouton d'envoi automatiquement
+      if (this.currentStep === this.steps.length) {
+        if (!this.isContactFormValid) {
+          // Afficher une validation visuelle dans FormStepSummary si implémentée
+          if (
+            this.$refs.formStepSummary &&
+            typeof this.$refs.formStepSummary.showValidationErrors ===
+              "function"
+          ) {
+            this.$refs.formStepSummary.showValidationErrors();
+          }
           return;
         }
       }
@@ -489,6 +520,18 @@ export default {
       setTimeout(() => {
         // Simuler l'envoi du formulaire
         console.log("Demande envoyée", { ...this.form, ...this.contactInfo });
+        mail.send({
+          to: this.contactInfo.email,
+          subject: "Demande de nettoyage",
+          body: `Bonjour ${
+            this.contactInfo.firstName
+          },\n\nMerci pour votre demande de nettoyage. Voici les détails :\n\n${JSON.stringify(
+            { ...this.form, ...this.contactInfo },
+            null,
+            2
+          )}\n\nNous vous contacterons bientôt.\n\nCordialement,\nL'équipe de nettoyage`,
+        });
+        
         this.currentStep = 7; // Étape après soumission
         this.showNotification = false;
         this.isSubmitting = false;
