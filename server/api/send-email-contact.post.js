@@ -3,40 +3,34 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const config = useRuntimeConfig();
 
-  // Débogage
-  console.log("Variables d'environnement:", {
-    userEnv: process.env.NUXT_GMAIL_USER,
-    passEnv: process.env.NUXT_GMAIL_APP_PASS ? "défini" : "non défini",
-    userConfig: config.nodemailerUser,
-    passConfig: config.nodemailerPass ? "défini" : "non défini",
+  // Afficher les informations de configuration (sans le mot de passe complet)
+  console.log("Configuration nodemailer:", {
+    user: config.nodemailerUser,
+    pass: config.nodemailerPass
+      ? `${config.nodemailerPass.substring(0, 3)}...`
+      : "absent",
+    host: "smtp.gmail.com",
+    port: 587,
   });
 
-  const { sendMail } = useNodeMailer();
-
-  // Le reste de votre code...
-
   try {
-    // Envoi au client
-    await sendMail({
-      to: body.email,
-      subject: `CONTACT: Nouveau message de ${body.name}`,
-      text: body.message,
+    const { sendMail } = useNodeMailer();
+
+    // Envoyer uniquement à vous-même pour tester
+    const result = await sendMail({
+      to: config.nodemailerUser, // envoyer à vous-même
+      subject: "Test de connexion SMTP sur Netlify",
+      text: "Ceci est un test de la configuration SMTP sur Netlify",
     });
 
-    // Envoi à l'administrateur
-    await sendMail({
-      to: config.nodemailerUser,
-      subject: `CONTACT: Nouveau message de ${body.name}`,
-      text: `Nom : ${body.name}\nEmail : ${body.email}\nMessage : ${body.message}`,
-    });
-
-    return { status: "success" };
+    console.log("Résultat envoi email:", result);
+    return { status: "success", details: result };
   } catch (error) {
-    console.error("Erreur d'envoi d'email:", error);
+    console.error("Erreur détaillée:", error);
     return {
       status: "error",
       message: error.message,
-      stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
+      details: JSON.stringify(error),
     };
   }
 });
