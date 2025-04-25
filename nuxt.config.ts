@@ -3,6 +3,10 @@
 import { defineNuxtConfig } from "nuxt/config";
 
 export default defineNuxtConfig({
+  runtimeConfig: {
+    nodemailerUser: process.env.NUXT_GMAIL_USER,
+    nodemailerPass: process.env.NUXT_GMAIL_APP_PASS,
+  },
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
   modules: ["@nuxt/ui", "nuxt-nodemailer"],

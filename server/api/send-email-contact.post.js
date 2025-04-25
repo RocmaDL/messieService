@@ -2,7 +2,7 @@
 export default defineEventHandler(async (event) => {
   // Récupère les données JSON envoyées par le client
   const body = await readBody(event);
-
+  const config = useRuntimeConfig();
   // Injecte le composable serveur
   const { sendMail } = useNodeMailer();
 
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
 
   // Envoi de l’e-mail de contact à l'administrateur
   await sendMail({
-    to: process.env.NUXT_GMAIL_USER, // destinataire
+    to:config.nodemailerUser, // destinataire
     subject: `CONTACT: Nouveau message de ${body.name}`, // sujet
     text: `Nom : ${body.name}\nEmail : ${body.email}\nMessage : ${body.message}`, // contenu texte
     // Pour du HTML : html: `<p>${body.message}</p>`
