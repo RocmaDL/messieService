@@ -10,6 +10,9 @@ export default defineNuxtConfig({
       nodemailerUser: process.env.NUXT_GMAIL_USER,
     },
   },
+  experimental: {
+    componentIslands: true,
+  },
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
   modules: ["@nuxt/ui", "nuxt-nodemailer"],

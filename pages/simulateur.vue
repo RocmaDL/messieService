@@ -489,8 +489,30 @@ export default {
       // Mise à jour explicite du champ spécifié
       this.form[fieldName] = value;
     },
-    submitForm() {
-      const mail = useMail();
+    async submitForm() {
+      const response = await fetch("/api/send-email-devis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          price: this.calculatePrice(),
+          area: this.form.area,
+          city: this.form.city,
+          frequency: this.form.frequency,
+          types: this.form.cleaningTypes,
+          clientType: this.form.clientType,
+          nom: this.contactInfo.firstName,
+          prenom: this.contactInfo.lastName,
+          entreprise: this.contactInfo.companyName,
+          email: this.contactInfo.email,
+          phone: this.contactInfo.phone,
+          comment: this.contactInfo.comment,
+        }),
+      });
+      const data = response.json();
+      if (!data.success) {
+        console.error("Erreur lors de l'envoi du formulaire", data.error);
+        return;
+      }
       // Vérifier si les informations de contact sont valides
       if (this.currentStep === this.steps.length) {
         if (!this.isContactFormValid) {
@@ -531,7 +553,7 @@ export default {
             2
           )}\n\nNous vous contacterons bientôt.\n\nCordialement,\nL'équipe de nettoyage`,
         });
-        
+
         this.currentStep = 7; // Étape après soumission
         this.showNotification = false;
         this.isSubmitting = false;
